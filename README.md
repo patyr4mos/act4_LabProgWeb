@@ -1,28 +1,30 @@
-# Explorador de países
+# Explorador de Pokémon
 
-Miniaplicación web que consume una API REST pública para mostrar información de países: bandera, capital, región, población y un detalle con idiomas, monedas y superficie. Proyecto de **Laboratorio de Programación Web (UANL FIME)**, Actividad 4.
+Miniaplicación web que consume una API REST pública para mostrar Pokémon: ilustración, número, nombre y un detalle con tipos, altura, peso, habilidades y estadísticas base. Proyecto de **Laboratorio de Programación Web (UANL FIME)**, Actividad 4.
 
-- **URL pública:** https://TU-USUARIO.github.io/paises-api/ ← *reemplaza con tu URL de GitHub Pages*
-- **Repositorio:** https://github.com/TU-USUARIO/paises-api ← *reemplaza con tu repositorio*
+- **URL pública:** https://patyr4mos.github.io/act4_LabProgWeb/
+- **Repositorio:** https://github.com/patyr4mos/act4_LabProgWeb
 
 ## API utilizada
 
-**[REST Countries v3.1](https://restcountries.com)**: API pública, gratuita, de solo lectura y sin llave ni datos sensibles.
+**[PokéAPI v2](https://pokeapi.co)**: API pública, gratuita y de solo lectura (solo método GET). No requiere llave ni cuenta y no maneja datos sensibles.
 
 | Uso en la app | Método y endpoint |
 |---|---|
-| Lista de países | `GET https://restcountries.com/v3.1/all?fields=name,translations,cca3,capital,region,population,flags` |
-| Detalle de un país | `GET https://restcountries.com/v3.1/alpha/{cca3}?fields=name,translations,flags,capital,region,subregion,population,area,languages,currencies` |
+| Lista de Pokémon | `GET https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0` |
+| Filtro por tipo | `GET https://pokeapi.co/api/v2/type/{tipo}` |
+| Detalle de un Pokémon | `GET https://pokeapi.co/api/v2/pokemon/{id}` |
 
-- **Parámetros:** `fields` es obligatorio en `/all` y admite como máximo 10 campos; por eso la lista y el detalle piden campos distintos.
-- **Formato de respuesta:** JSON. La lista es un arreglo de objetos país; el detalle devuelve un arreglo con un objeto.
-- **Códigos de respuesta considerados:** `200` correcto, `400` solicitud inválida, `404` sin resultados, `429` demasiadas solicitudes y `5xx` servicio no disponible.
+- **Parámetros:** la lista admite `limit` (cuántos recursos devolver) y `offset` (cuántos saltar); son los únicos parámetros de consulta permitidos por la API.
+- **Formato de respuesta:** JSON. La lista devuelve `{ count, next, previous, results: [{ name, url }] }`; el detalle devuelve un objeto con `id`, `types`, `height`, `weight`, `abilities` y `stats`; el tipo devuelve su arreglo `pokemon`.
+- **Códigos de respuesta considerados:** `200` correcto, `404` recurso inexistente, `429` demasiadas solicitudes y `5xx` servicio no disponible.
+- **Uso responsable:** la política de uso justo de PokéAPI pide no repetir peticiones; la lista se guarda en `sessionStorage` y los resultados por tipo se guardan en memoria.
 
 ## Funcionalidades
 
 - Consumo con `fetch()` y `async/await`, con tiempo máximo de espera de 10 s (`AbortController`).
-- Tarjetas creadas dinámicamente en el DOM con los datos de la respuesta JSON.
-- **Interacción:** búsqueda por nombre (en español o inglés) o capital, filtro por región, ordenamiento (nombre/población), paginación de 12 países y ventana de detalle al seleccionar una tarjeta.
+- Tarjetas creadas dinámicamente en el DOM con los datos del JSON.
+- **Interacción:** búsqueda por nombre o número, filtro por tipo (consulta al endpoint `/type`), ordenamiento por número o nombre, paginación de 12 y ventana de detalle al seleccionar una tarjeta.
 - **Estados:**
   - *Cargando*: indicador animado mientras responde la API.
   - *Resultado vacío*: mensaje y botón «Limpiar filtros».
@@ -33,7 +35,7 @@ Miniaplicación web que consume una API REST pública para mostrar información 
 ## Estructura
 
 ```
-paises-api/
+act4_LabProgWeb/
 ├── index.html   estructura de la página
 ├── style.css    estilos
 ├── app.js       consumo de la API, lógica y construcción del DOM
@@ -44,31 +46,31 @@ paises-api/
 ## Cómo usarla
 
 1. Abre la URL pública, o descarga el repositorio y abre `index.html` en el navegador (requiere internet).
-2. Escribe en el buscador, elige una región o cambia el orden.
+2. Escribe en el buscador, elige un tipo o cambia el orden.
 3. Pulsa una tarjeta para ver el detalle y cierra con la × o con `Esc`.
 
 ## Despliegue en GitHub Pages
 
 1. Sube el proyecto a un repositorio público de GitHub.
 2. En **Settings → Pages**, elige *Deploy from a branch*, rama `main` y carpeta `/ (root)`.
-3. Espera un minuto y abre `https://TU-USUARIO.github.io/paises-api/`.
+3. Espera un minuto y abre la URL pública.
 
 ## Capturas
 
-| Lista de países | Búsqueda y filtros |
+| Lista | Búsqueda |
 |---|---|
 | ![Lista](docs/captura-lista.png) | ![Búsqueda](docs/captura-busqueda.png) |
-| **Detalle de un país** | **Estados de carga, vacío y error** |
-| ![Detalle](docs/captura-detalle.png) | ![Estados](docs/captura-estados.png) |
+| **Filtro por tipo** | **Detalle** |
+| ![Filtro](docs/captura-filtro.png) | ![Detalle](docs/captura-detalle.png) |
 
 *(Agrega tus capturas en la carpeta `docs/` con esos nombres.)*
 
 ## Reflexión técnica
 
-La parte que más pesó fue manejar bien los fallos. `fetch()` solo rechaza la promesa ante errores de red, así que un `404` o un `500` no lanzan excepción por sí solos; por eso la función `fetchJSON` revisa `res.ok` y convierte cada caso en un error con mensaje claro para el usuario. También descubrí que `/all` exige el parámetro `fields` con un máximo de 10 campos, lo que me llevó a separar la consulta de la lista (pocos campos) de la del detalle (más campos).
+La primera versión del proyecto usaba REST Countries v3.1, y al publicarla dejó de funcionar: la API había sido retirada y respondía pidiendo migrar a una versión nueva que exige llave de acceso. Una llave dentro del código de una página pública queda expuesta a cualquiera, así que cambié a PokéAPI, que no requiere autenticación. Aprendí que una API externa puede cambiar o desaparecer, y que conviene revisar su documentación y su política de uso antes de construir sobre ella.
 
-Descargar la lista una sola vez y filtrar, ordenar y paginar en el navegador hace la búsqueda inmediata y evita saturar una API gratuita. Como contrapartida, la primera carga es un poco más pesada. Si el proyecto creciera, usaría caché local y los endpoints de búsqueda de la API.
+También aprendí que `fetch()` solo rechaza la promesa ante errores de red, así que un `404` o un `500` no lanzan excepción por sí solos. Por eso `fetchJSON` revisa `res.ok` y convierte cada caso en un error con mensaje claro. Descargar la lista una sola vez y filtrar, ordenar y paginar en el navegador hace la búsqueda inmediata y respeta la política de uso justo; el filtro por tipo sí consulta la API y guarda el resultado para no repetirlo.
 
 ## Créditos
 
-Datos: [REST Countries](https://restcountries.com) (licencia MPL 2.0). Banderas incluidas en la propia API.
+Datos: [PokéAPI](https://pokeapi.co). Las ilustraciones se sirven desde el repositorio de sprites de PokéAPI en GitHub. Pokémon y sus nombres son marcas de sus respectivos dueños; el proyecto es solo educativo.

@@ -3,43 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Explorador de países · REST Countries</title>
-  <meta name="description" content="Miniaplicación web que consume la API REST Countries con fetch y async/await.">
+  <title>Explorador de Pokémon · PokéAPI</title>
+  <meta name="description" content="Miniaplicación web que consume la API REST PokéAPI con fetch y async/await.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="top">
     <div class="wrap">
-      <h1>Explorador de países</h1>
-      <p class="sub">Datos en vivo de la API <a href="https://restcountries.com" target="_blank" rel="noopener">REST Countries</a>.</p>
+      <h1>Explorador de Pokémon</h1>
+      <p class="sub">Datos en vivo de la API <a href="https://pokeapi.co" target="_blank" rel="noopener">PokéAPI</a>.</p>
     </div>
   </header>
 
   <main class="wrap">
     <section class="controls" aria-label="Búsqueda y filtros">
       <div class="field grow">
-        <label for="q">Buscar país</label>
-        <input id="q" type="search" placeholder="Ej. México, Japan, Brasil…" autocomplete="off">
+        <label for="q">Buscar Pokémon</label>
+        <input id="q" type="search" placeholder="Ej. pikachu, char, 25…" autocomplete="off">
       </div>
       <div class="field">
-        <label for="region">Región</label>
-        <select id="region">
-          <option value="">Todas</option>
-          <option value="Africa">África</option>
-          <option value="Americas">América</option>
-          <option value="Asia">Asia</option>
-          <option value="Europe">Europa</option>
-          <option value="Oceania">Oceanía</option>
-          <option value="Antarctic">Antártida</option>
+        <label for="tipo">Tipo</label>
+        <select id="tipo">
+          <option value="">Todos</option>
         </select>
       </div>
       <div class="field">
         <label for="sort">Ordenar por</label>
         <select id="sort">
+          <option value="id-asc">Número (menor)</option>
+          <option value="id-desc">Número (mayor)</option>
           <option value="name-asc">Nombre (A–Z)</option>
           <option value="name-desc">Nombre (Z–A)</option>
-          <option value="pop-desc">Población (mayor)</option>
-          <option value="pop-asc">Población (menor)</option>
         </select>
       </div>
     </section>
@@ -48,7 +42,7 @@
 
     <div id="feedback" class="feedback" hidden></div>
 
-    <section id="grid" class="grid" aria-label="Lista de países"></section>
+    <section id="grid" class="grid" aria-label="Lista de Pokémon"></section>
 
     <nav id="pager" class="pager" aria-label="Paginación" hidden>
       <button id="prev" type="button">← Anterior</button>

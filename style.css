@@ -1,19 +1,21 @@
 :root {
-  --bg: #f4f7f8; --card: #fff; --ink: #1c2b33; --muted: #5b6b74;
-  --brand: #0f6b78; --brand-dark: #0a4f59; --line: #d7e0e4; --danger: #a4262c;
-  --radius: 12px;
+  --bg: #f5f6f8; --card: #fff; --ink: #1f2430; --muted: #5d6573;
+  --brand: #c62f2f; --brand-dark: #9d2222; --line: #dde1e8; --danger: #a4262c;
+  --art-bg: #eef1f6; --radius: 12px;
 }
 @media (prefers-color-scheme: dark) {
-  :root { --bg: #11181c; --card: #1a2429; --ink: #e6eef1; --muted: #9fb0b8;
-          --brand: #4cc2d1; --brand-dark: #7fd6e2; --line: #2d3b42; --danger: #ff8a8f; }
+  :root { --bg: #14161b; --card: #1d2027; --ink: #eceff4; --muted: #a3acba;
+          --brand: #ff6b6b; --brand-dark: #ff9a9a; --line: #2f343e; --danger: #ff8a8f; --art-bg: #262a33; }
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
        background: var(--bg); color: var(--ink); line-height: 1.5; }
 .wrap { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
 .top { background: var(--brand); color: #fff; padding: 1.5rem 0; }
+@media (prefers-color-scheme: dark) { .top { color: #2a0d0d; } .top a { color: #2a0d0d; } }
 .top h1 { margin: 0; font-size: 1.8rem; }
-.top .sub { margin: .25rem 0 0; opacity: .9; }
+.top .sub { margin: .25rem 0 0; opacity: .95; }
 .top a { color: #fff; }
 main { padding-top: 1.25rem; padding-bottom: 2rem; }
 
@@ -28,18 +30,16 @@ input:focus-visible, select:focus-visible, button:focus-visible, .card:focus-vis
   outline: 3px solid var(--brand); outline-offset: 2px; }
 .status { min-height: 1.4rem; margin: .25rem 0 .75rem; color: var(--muted); font-size: .95rem; }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
 .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
-        overflow: hidden; cursor: pointer; text-align: left; padding: 0; color: inherit;
+        overflow: hidden; cursor: pointer; text-align: center; padding: 0; color: inherit;
         transition: transform .15s ease, box-shadow .15s ease; }
-.card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,.12); }
-.card img { display: block; width: 100%; height: 130px; object-fit: cover; background: var(--line); }
-.card .body { padding: .8rem .9rem 1rem; }
-.card h2 { margin: 0 0 .35rem; font-size: 1.05rem; }
-.card dl { margin: 0; font-size: .9rem; color: var(--muted); }
-.card dt { display: inline; font-weight: 600; }
-.card dd { display: inline; margin: 0; }
-.card .row { display: block; }
+.card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,.14); }
+.art { background: var(--art-bg); aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; }
+.art img { width: 82%; height: 82%; object-fit: contain; display: block; }
+.card .body { padding: .6rem .8rem .9rem; }
+.card h2 { margin: 0; font-size: 1.05rem; }
+.num { color: var(--muted); font-size: .85rem; font-weight: 600; }
 
 .feedback { text-align: center; padding: 2.5rem 1rem; background: var(--card);
             border: 1px dashed var(--line); border-radius: var(--radius); }
@@ -55,22 +55,30 @@ input:focus-visible, select:focus-visible, button:focus-visible, .card:focus-vis
 
 button.primary, .pager button { background: var(--brand); color: #fff; border: 0; padding: .55rem 1.1rem;
   border-radius: 8px; cursor: pointer; font-weight: 600; }
-@media (prefers-color-scheme: dark) { button.primary, .pager button { color: #082a30; } }
+@media (prefers-color-scheme: dark) { button.primary, .pager button { color: #2a0d0d; } }
 button.primary:hover, .pager button:hover:not(:disabled) { background: var(--brand-dark); }
 .pager { display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1.5rem; }
 .pager button:disabled { opacity: .45; cursor: not-allowed; }
 
-dialog { border: 0; border-radius: var(--radius); padding: 0; width: min(560px, 92vw);
+dialog { border: 0; border-radius: var(--radius); padding: 0; width: min(520px, 92vw); max-height: 92vh;
          background: var(--card); color: var(--ink); box-shadow: 0 20px 60px rgba(0,0,0,.35); }
 dialog::backdrop { background: rgba(0,0,0,.55); }
 dialog .close { position: absolute; top: .4rem; right: .6rem; font-size: 1.8rem; line-height: 1;
                 background: rgba(0,0,0,.45); color: #fff; border: 0; border-radius: 50%;
                 width: 2.1rem; height: 2.1rem; cursor: pointer; }
-.detail img { width: 100%; max-height: 220px; object-fit: cover; display: block; background: var(--line); }
+.detail .art.big { aspect-ratio: auto; height: 240px; }
+.detail .art.big img { height: 92%; width: auto; max-width: 92%; }
 .detail .content { padding: 1rem 1.25rem 1.4rem; }
-.detail h2 { margin: 0; }
-.detail .official { margin: 0 0 .75rem; color: var(--muted); font-size: .95rem; }
+.detail h2 { margin: 0 0 .4rem; }
+.detail h3 { margin: 1rem 0 .4rem; font-size: 1rem; }
+.badges { margin: 0 0 .75rem; display: flex; gap: .4rem; flex-wrap: wrap; }
+.badge { background: var(--brand); color: #fff; border-radius: 999px; padding: .1rem .75rem; font-size: .85rem; font-weight: 600; }
+@media (prefers-color-scheme: dark) { .badge { color: #2a0d0d; } }
 .detail table { width: 100%; border-collapse: collapse; }
 .detail th, .detail td { text-align: left; padding: .4rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
-.detail th { width: 38%; color: var(--muted); font-weight: 600; }
+.detail th { width: 34%; color: var(--muted); font-weight: 600; }
+.stat { display: grid; grid-template-columns: 8.5rem 2.5rem 1fr; gap: .5rem; align-items: center; font-size: .9rem; margin: .25rem 0; }
+.stat .sval { font-weight: 700; text-align: right; }
+.stat .bar { height: 8px; background: var(--art-bg); border-radius: 999px; overflow: hidden; }
+.stat .fill { display: block; height: 100%; background: var(--brand); border-radius: 999px; }
 .foot { padding-bottom: 1.5rem; color: var(--muted); font-size: .85rem; }
